@@ -296,6 +296,15 @@ extension AespaSession: VideoContext {
         videoContext.stopRecording(completionHandler)
     }
     
+    public func addToAlbum(videoFile: URL) async throws {
+        try await albumManager.addToAlbum(filePath: videoFile)
+    }
+    
+    public func deleteTempFile(url: URL) throws {
+        try FilePathProvider.deleteFile(at: url)
+    }
+    
+
     public func fetchVideoFiles(limit: Int = 0) async -> [VideoAsset] {
         return await videoContext.fetchVideoFiles(limit: limit)
     }

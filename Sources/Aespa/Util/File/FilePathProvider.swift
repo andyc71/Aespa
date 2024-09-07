@@ -70,4 +70,8 @@ struct FilePathProvider {
 
         return directoryPathURL
     }
+    
+    static func deleteFile(at url: URL, from fileManager: FileManager = .default) throws {
+        try fileManager.removeItem(at: url)
+    }
 }
