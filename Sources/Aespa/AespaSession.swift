@@ -283,6 +283,10 @@ extension AespaSession: VideoContext {
     public var isMuted: Bool {
         videoContext.isMuted
     }
+    
+    public var isTorchAvailable: Bool {
+        videoContext.isTorchAvailable
+    }
 
     public func startRecording(
         at path: URL? = nil,
@@ -317,6 +321,7 @@ extension AespaSession: VideoContext {
         let onComplete = onComplete ?? { _ in }
         return videoContext.video(videoContextOption, onComplete: onComplete)
     }
+    
 }
 
 extension AespaSession: PhotoContext {

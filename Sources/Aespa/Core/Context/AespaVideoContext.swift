@@ -65,6 +65,10 @@ extension AespaVideoContext: VideoContext {
         coreSession.audioDeviceInput == nil
     }
     
+    public var isTorchAvailable: Bool {
+        coreSession.videoDeviceInput?.device.isTorchAvailable ?? false
+    }
+    
     public var videoFilePublisher: AnyPublisher<Result<VideoFile, Error>, Never> {
         videoFileBufferSubject
             .handleEvents(receiveOutput: { status in
