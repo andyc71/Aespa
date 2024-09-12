@@ -179,7 +179,7 @@ public protocol VideoContext {
     ///
     /// - Parameter onComplete: A closure to be called after the recording has stopped
     ///  and the video file is saved or failed.
-    func stopRecording(_ onComplete: @escaping (Result<VideoFile, Error>) -> Void)
+    func stopRecording(saveToAlbum: Bool, _ onComplete: @escaping (Result<VideoFile, Error>) -> Void)
     
     /// Applies a specified configuration or action to the video session context.
     ///

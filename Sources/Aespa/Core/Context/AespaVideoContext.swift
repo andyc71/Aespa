@@ -94,12 +94,12 @@ extension AespaVideoContext: VideoContext {
         isRecording = true
     }
     
-    public func stopRecording(_ onCompelte: @escaping ResultHandler<VideoFile> = { _ in }) {
+    public func stopRecording(saveToAlbum: Bool, _ onCompelte: @escaping ResultHandler<VideoFile> = { _ in }) {
         Task(priority: .utility) {
             do {
                 let videoFilePath = try await recorder.stopRecording()
                 
-                if option.asset.synchronizeWithLocalAlbum {
+                if option.asset.synchronizeWithLocalAlbum && saveToAlbum {
                     try await albumManager.addToAlbum(filePath: videoFilePath)
                     // delete
                 }

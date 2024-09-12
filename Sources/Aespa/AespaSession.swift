@@ -296,8 +296,8 @@ extension AespaSession: VideoContext {
         videoContext.startRecording(at: path, autoVideoOrientationEnabled: autoVideoOrientationEnabled, onComplete)
     }
     
-    public func stopRecording(_ completionHandler: @escaping (Result<VideoFile, Error>) -> Void = { _ in }) {
-        videoContext.stopRecording(completionHandler)
+    public func stopRecording(saveToAlbum: Bool, _ completionHandler: @escaping (Result<VideoFile, Error>) -> Void = { _ in }) {
+        videoContext.stopRecording(saveToAlbum: saveToAlbum, completionHandler)
     }
     
     public func addToAlbum(videoFile: URL) async throws {
