@@ -30,6 +30,10 @@ open class AespaSession {
 
     private let previewLayerSubject: CurrentValueSubject<AVCaptureVideoPreviewLayer?, Never>
     
+    // Publisher to notify about zoom changes
+    private let zoomDidChangeSubject = PassthroughSubject<CGFloat, Never>()
+    private var zoomObserver: NSKeyValueObservation?
+
     private var photoSetting: AVCapturePhotoSettings
     
     private var videoContext: AespaVideoContext<AespaSession>!
@@ -185,6 +189,40 @@ open class AespaSession {
             .publisher(for: NSNotification.Name.AVCaptureDeviceSubjectAreaDidChange)
             .eraseToAnyPublisher()
     }
+    
+    /// Publishes events related to camera zoom
+    public func getZoomDidChangePublisher() -> AnyPublisher<CGFloat, Never> {
+        if zoomObserver == nil {
+            observeZoomFactor()
+        }
+        return zoomDidChangeSubject.eraseToAnyPublisher()
+    }
+
+    private func observeZoomFactor() {
+        guard let device = coreSession.videoDeviceInput?.device else {
+            Logger.log(message: "Device not available so cannot observe zoom factor.")
+            return
+        }
+        
+        zoomObserver = device.observe(\.videoZoomFactor, options: [.new, .initial]) { [weak self] (device, change) in
+            DispatchQueue.main.async {
+                let newZoomFactor = device.videoZoomFactor
+                //self?.currentZoomFactor = newZoomFactor
+                
+                // Publish the zoom change event
+                //self?.zoomDidChangeSubject.send(.zoomDidChange(currentZoomFactor: newZoomFactor))
+                
+                self?.zoomDidChangeSubject.send(newZoomFactor)
+                
+            }
+        }
+    }
+    
+    deinit {
+        zoomObserver?.invalidate()
+    }
+    
+
     
     /// Checks if essential conditions to start recording are satisfied.
     /// This includes checking for capture authorization, if the session is running,
